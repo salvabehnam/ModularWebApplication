@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Private Chat</title>
+    <script src="/socket-io.min.js"></script>
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+        font-size: 14px;
+        vertical-align: top;
+        margin: 0;
+        padding: 0;
+    }
+
+    #chat {
+        display: inline-block;
+        width: 100%;
+        border: 1px solid black;
+        height: 100%;
+        overflow: auto;
+    }
+
+    .message {
+        padding: 8px;
+        border-bottom: 1px solid red;
+    }
+</style>
+<body dir="rtl">
+<p style="font-size: 24px; font-weight: bold; padding: 20px">چت خصوصی</p>
+<p style="font-size: 20px; padding: 18px">(شما <%- username %>) با (<%- username2 %>)</p>
+<div style="height: 400px;">
+    <div id="chat" dir="ltr">
+        <% for(let chat of chats) { %>
+            <% if (chat.from_id === userId) { %>
+                <div class="message"><span style="font-weight: bold"><%- username %></span>: <%- chat.message %></div>
+            <% } else { %>
+                <div class="message"><span style="font-weight: bold"><%- username2 %></span>: <%- chat.message %></div>
+            <% } %>
+        <% } %>
+    </div>
+</div>
+<div style="height: 30px; margin-top: 20px;">
+    <input style="height: 100%" id="input" type="text">
+    <button style="height: 100%; padding: 4px;" onclick="send()">ارسال</button>
+</div>
+</body>
+</html>
+<script>
+    
+    <%- `const userId = ${userId}` %>
+    <%- `const username = '${username}'` %>
+    <%- `const userId2 = ${userId2}` %>
+    <%- `const username2 = '${username2}'` %>
+    let socket = io()
+    socket.emit('register', {type: 'pv', fromUserId: userId, toUserId: userId2})
+
+    socket.on('message', function(data) {
+        document.getElementById('chat').innerHTML += `<p class="message"><span style="font-weight: bold">${username2}</span>: ${data.message}</p>`
+    })
+
+    function send() {
+        let message = document.getElementById('input').value
+        socket.emit('pv-message', {message: message})
+        document.getElementById('input').value = ''
+        document.getElementById('chat').innerHTML += `<p class="message"><span style="font-weight: bold">${username}</span>: ${message}</p>`
+    }
+</script>

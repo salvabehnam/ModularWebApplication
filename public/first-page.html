@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Chat-Room</title>
+</head>
+<style>
+    html{
+        background-image:url("jonatan-pie-3l3RwQdHRHg-unsplash.jpg");
+        background-position: center;
+        background-size :100% 100%;
+        background-repeat: no-repeat;
+        height: 100vh;
+        width: 100vw;
+    }
+    * {
+        font-size: 14px;
+        color: aliceblue;
+
+    }
+    p{
+        display: flex;
+        height: 10rem;
+        width: 100vw;
+        justify-content: center;
+        align-items: center;
+
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    button , div{
+        border-radius: 6px;
+        color: black;
+        margin: 20px;
+    }
+    button{
+
+    }
+</style>
+<body dir="rtl">
+<form method="post" action="/login">
+    
+    <p style="
+    font-size: 50px;
+    background-color: rgba(255,255,255,0.1);">خوش آمدید به چت روم!</p>
+    <div>
+        <label>
+            نام کاربری
+            <input type="text" name="username">
+        </label>
+    </div>
+    <button type="submit">ورود</button>
+</form>
+</body>
+</html>

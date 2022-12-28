@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lobby</title>
+    <script src="/socket-io.min.js"></script>
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+        font-size: 14px;
+        vertical-align: top;
+        margin: 0;
+        padding: 0;
+    }
+
+    #chat {
+        display: inline-block;
+        width: 80%;
+        border: 1px solid black;
+        height: 100%;
+        overflow: auto;
+    }
+
+    #users {
+        display: inline-block;
+        width: 19%;
+        border: 1px solid black;
+        height: 100%;
+        overflow: auto;
+    }
+
+    .message {
+        padding: 8px;
+        border-bottom: 1px solid red;
+    }
+
+    .user {
+        padding: 8px;
+        text-align: center;
+        border-bottom: 1px solid red;
+    }
+</style>
+<body dir="rtl">
+<p style="font-size: 24px; font-weight: bold; padding: 20px">لابی</p>
+<p style="font-size: 20px; padding: 18px">(شما <%- username %>)</p>
+<div style="height: 400px;">
+    <div id="chat" dir="ltr">
+        <% for(let chat of chats) { %>
+            <div class="message"><span style="font-weight: bold"><%- chat.username %></span>: <%- chat.message %></div>
+        <% } %>
+    </div>
+    <div id="users">
+        <p style="padding: 4px; font-size: 16px; font-weight: bold; background-color: azure">یوزرها:</p>
+        <% for(let user of users) { %>
+            <p class="user" onclick="openPrivateChat(<%- user.id %>)"><%- user.username %></p>
+        <% } %>
+    </div>
+</div>
+<div style="height: 30px; margin-top: 20px;">
+    <input style="height: 100%" id="input" type="text">
+    <button style="height: 100%; padding: 4px;" onclick="send()">ارسال</button>
+</div>
+</body>
+</html>
+<script>
+    <%- `const userId = ${userId}` %>
+    <%- `const username = '${username}'` %>
+    let socket = io()
+    socket.emit('register', {type: 'lobby'})
+
+    socket.on('message-lobby', function(data) {
+        document.getElementById('chat').innerHTML += `<p class="message"><span style="font-weight: bold">${data.username}</span>: ${data.message}</p>`
+    })
+
+    socket.on('newUser', function(data) {
+        document.getElementById('users').innerHTML += `<p class="user" onclick="openPrivateChat(${data.userId})">${data.username}</p>`
+    })
+
+    function send() {
+        let message = document.getElementById('input').value
+        socket.emit('message', {userId: userId, username: username, message: message})
+        document.getElementById('input').value = ''
+        document.getElementById('chat').innerHTML += `<p class="message"><span style="font-weight: bold">${username}</span>: ${message}</p>`
+    }
+
+    function openPrivateChat(pvUserId) {
+        window.open(`/pv?id=${userId}&id2=${pvUserId}`)
+    }
+</script>

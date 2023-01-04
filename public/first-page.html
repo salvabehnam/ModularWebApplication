@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome to Chat-Room</title>
+    <link href="/public/bootstrap.min.css" rel="stylesheet">
 </head>
 <style>
     html{
@@ -20,7 +21,7 @@
     }
     p{
         display: flex;
-        height: 10rem;
+        height: 25rem;
         width: 100vw;
         justify-content: center;
         align-items: center;
@@ -34,7 +35,8 @@
         font-weight: bold;
     }
     button , div{
-        border-radius: 6px;
+        border-radius: 3px;
+        border-width: 0ch;
         color: black;
         margin: 20px;
     }
@@ -43,9 +45,8 @@
     }
 </style>
 <body dir="rtl">
-<form method="post" action="/login">
-    
     <p style="font-size: 49px; background-color: rgba(255,255,255,0.1);">خوش آمدید به چت روم!</p>
+<form class="card" method="post" action="/login">
     <div>
         <label>
             نام کاربری
